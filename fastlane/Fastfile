@@ -1,0 +1,11 @@
+lane :test do
+  update_jenkins_build(
+    description: "AdHoc v1.0 (1.0.1)",
+  )
+
+  update_jenkins_build(
+    project: "foobar", # specify specific project name
+    build_number: 75, # specify specific build number
+    description: "AdHoc v1.0 (1.0.1)",
+  )
+end
