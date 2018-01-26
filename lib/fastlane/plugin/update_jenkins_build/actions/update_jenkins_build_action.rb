@@ -41,11 +41,13 @@ module Fastlane
       end
 
       def self.base_uri
-        "#{ENV['JENKINS_URL']}#{@project}/#{@build_number}"
+        uri = URI(ENV['JENKINS_URL'])
+        uri.path = "/job/#{@project}/#{@build_number}"
+        uri.to_s
       end
 
       def self.return_value
-        "the ture or false of result"
+        "ture/false"
       end
 
       def self.return_type
