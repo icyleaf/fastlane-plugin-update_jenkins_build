@@ -15,15 +15,13 @@ module Fastlane
 
         url = "#{base_uri}/submitDescription"
         res = if @user
-                HTTP.follow
-                    .basic_auth(user: @user, pass: @password)
+                HTTP.basic_auth(user: @user, pass: @password)
                     .post(url, form: {description: @description})
               else
-                HTTP.follow
-                    .post(url, form: {description: @description})
+                HTTP.post(url, form: {description: @description})
               end
 
-        result = res.status == 200 ? true : false
+        result = res.status == 302 ? true : false
 
         params = {
           title: "Summary for update_jenkins_build #{UpdateJenkinsBuild::VERSION}".green,
