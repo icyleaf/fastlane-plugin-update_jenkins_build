@@ -22,7 +22,7 @@ $ bundle exec fastlane action update_jenkins_build
 +--------------------------------------+---------+----------------------+
 | Plugin                               | Version | Action               |
 +--------------------------------------+---------+----------------------+
-| fastlane-plugin-update_jenkins_build | 0.1.0   | update_jenkins_build |
+| fastlane-plugin-update_jenkins_build | 0.1.2   | update_jenkins_build |
 +--------------------------------------+---------+----------------------+
 
 Loading documentation for update_jenkins_build:
@@ -42,7 +42,7 @@ Loading documentation for update_jenkins_build:
 +-----------------------------------+
 | update_jenkins_build Return Value |
 +-----------------------------------+
-| the ture or false of result       |
+| ture/false                        |
 +-----------------------------------+
 ```
 

@@ -1,6 +1,6 @@
 describe Fastlane::Actions::UpdateJenkinsBuildAction do
   describe '#run' do
-    let(:stub_ci_url) { 'http://stub.ci.com' }
+    let(:stub_ci_url) { 'http://stub.ci.com/' }
     let(:stub_project_name) { 'example-project' }
     let(:stub_build_number) { '10' }
 

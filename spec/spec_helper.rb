@@ -15,7 +15,7 @@ require 'fastlane/plugin/update_jenkins_build' # import the actual plugin
 Fastlane.load_actions # load other actions (in case your plugin calls other actions or shared values)
 
 def stub_jenkins_project(name, build, description, user = nil, password = nil, status = 200)
-  template_url = Addressable::Template.new("#{ENV['JENKINS_URL']}/#{name}/#{build}/submitDescription")
+  template_url = Addressable::Template.new("#{ENV['JENKINS_URL']}job/#{name}/#{build}/submitDescription")
 
   mock = stub_request(:post, template_url).with(body: { description: description })
   if user && password
