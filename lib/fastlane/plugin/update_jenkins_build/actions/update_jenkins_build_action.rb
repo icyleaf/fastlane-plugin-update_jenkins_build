@@ -41,7 +41,7 @@ module Fastlane
       end
 
       def self.base_uri
-        "#{ENV['JENKINS_URL']}/#{@project}/#{@build_number}"
+        "#{ENV['JENKINS_URL']}#{@project}/#{@build_number}"
       end
 
       def self.return_value
@@ -49,7 +49,7 @@ module Fastlane
       end
 
       def self.return_type
-        :string
+        :boolean
       end
 
       def self.example_code
@@ -109,7 +109,7 @@ module Fastlane
       end
 
       def self.authors
-        ["icyleaf <icyleaf.cn@gmail.com>"]
+        ["icyleaf"]
       end
 
       def self.is_supported?(platform)
