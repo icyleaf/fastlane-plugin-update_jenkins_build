@@ -15,10 +15,12 @@ module Fastlane
 
         url = "#{base_uri}/submitDescription"
         res = if @user
-                HTTP.basic_auth(user: @user, pass: @password)
+                HTTP.follow
+                    .basic_auth(user: @user, pass: @password)
                     .post(url, form: {description: @description})
               else
-                HTTP.post(url, form: {description: @description})
+                HTTP.follow
+                    .post(url, form: {description: @description})
               end
 
         result = res.status == 200 ? true : false
