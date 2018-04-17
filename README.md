@@ -22,6 +22,7 @@ $ bundle exec fastlane action update_jenkins_build
 | Key          | Description                                 | Env Var                           | Default |
 +--------------+---------------------------------------------+-----------------------------------+---------+
 | description  | the description of current build            | UPDATE_JENKINS_BUILD_DESCRIPTION  |         |
+| url          | the url of jenkins                          | UPDATE_JENKINS_BUILD_URL          |         |
 | project      | the name of project(job)                    | UPDATE_JENKINS_BUILD_PROJECT      |         |
 | build_number | the build number of project(job)            | UPDATE_JENKINS_BUILD_BUILD_NUMBER |         |
 | user         | the user of jenkins if enabled security     | UPDATE_JENKINS_BUILD_USER         |         |
@@ -31,7 +32,7 @@ $ bundle exec fastlane action update_jenkins_build
 +-----------------------------------+
 | update_jenkins_build Return Value |
 +-----------------------------------+
-| ture/false                        |
+| [ture/false, response_body]       |
 +-----------------------------------+
 ```
 

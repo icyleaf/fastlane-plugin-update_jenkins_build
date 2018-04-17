@@ -9,24 +9,32 @@ module Fastlane
       def self.run(params)
         @user = params[:user]
         @password = params[:password]
+        @url = params[:url]
         @project = params[:project]
         @build_number = params[:build_number]
         @description = params[:description]
 
         url = "#{base_uri}/submitDescription"
-        res = if @user
+        res = if @user || @password
                 HTTP.basic_auth(user: @user, pass: @password)
                     .post(url, form: {description: @description})
               else
-                HTTP.post(url, form: {description: @description})
+                HTTP.post(url, form: {
+                  "description" => @description,
+                  "Jenkins-Crumb" => "234234234234234234"
+                })
               end
 
-        result = res.status == 302 ? true : false
+        result = if res.code == 302
+                  'success'
+                else
+                  "#{res.code} fail"
+                end
 
         params = {
           title: "Summary for update_jenkins_build #{UpdateJenkinsBuild::VERSION}".green,
           rows: {
-            result: (result ? 'success' : 'fail'),
+            result: result,
             url: "#{base_uri}/editDescription",
             auth: @user ? true : false,
             description: @description,
@@ -37,21 +45,21 @@ module Fastlane
         puts Terminal::Table.new(params)
         puts ""
 
-        result
+        [result, res.body]
       end
 
       def self.base_uri
-        uri = URI(ENV['JENKINS_URL'])
+        uri = URI(@url)
         uri.path = "/job/#{@project}/#{@build_number}"
         uri.to_s
       end
 
       def self.return_value
-        "ture/false"
+        "[ture/false, response_body]"
       end
 
       def self.return_type
-        :boolean
+        :array
       end
 
       def self.example_code
@@ -60,6 +68,7 @@ module Fastlane
             description: "AdHoc v1.0 (1.0.1)"
           )',
           'update_jenkins_build(
+            url: "http://127.0.0.1:8080/", # specify specific jenkins url
             project: "foobar", # specify specific project name
             build_number: 75, # specify specific build number
             description: "AdHoc v1.0 (1.0.1)",
@@ -76,12 +85,22 @@ module Fastlane
         "Update build's description of jenkins"
       end
 
+      def self.details
+        "MUST disable CSRF in Security configure"
+      end
+
       def self.available_options
         [
           FastlaneCore::ConfigItem.new(key: :description,
                                   env_name: "UPDATE_JENKINS_BUILD_DESCRIPTION",
                                description: "the description of current build",
                                   optional: false,
+                                      type: String),
+          FastlaneCore::ConfigItem.new(key: :url,
+                                  env_name: "UPDATE_JENKINS_BUILD_URL",
+                               description: "the url of jenkins",
+                             default_value: ENV['JENKINS_URL'],
+                                  optional: true,
                                       type: String),
           FastlaneCore::ConfigItem.new(key: :project,
                                   env_name: "UPDATE_JENKINS_BUILD_PROJECT",
