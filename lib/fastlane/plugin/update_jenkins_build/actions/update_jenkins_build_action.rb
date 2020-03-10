@@ -1,5 +1,6 @@
 require 'fastlane/action'
 require_relative '../helper/update_jenkins_build_helper'
+require 'rubygems'
 require 'http'
 require 'uri'
 
@@ -25,15 +26,14 @@ module Fastlane
                 })
               end
 
-        result = if res.code == 302
-                  'success'
-                else
-                  "#{res.code} fail"
-                end
+        # Submit form succesed it will 302 to the build url.
+        result = res.code == 302 ? 'success' : "#{res.code} fail"
 
+        jenkins_version = Helper::UpdateJenkinsBuildHelper.jenkins_version(@url, @user, @password)
         params = {
           title: "Summary for update_jenkins_build #{UpdateJenkinsBuild::VERSION}".green,
           rows: {
+            jenkins_version: jenkins_version,
             result: result,
             url: "#{base_uri}/editDescription",
             auth: @user ? true : false,
@@ -41,9 +41,18 @@ module Fastlane
           }
         }
 
-        puts ""
         puts Terminal::Table.new(params)
-        puts ""
+
+        if res.code != 302
+          UI.error "Detect `update_jenkins_build` ran fail."
+          if jenkins_version && Gem::Version.new(jenkins_version) > Gem::Version.new('2.221')
+            UI.error "Because Jenkins v#{jenkins_version} removed 'disable CSRF Protection' option since 2.222,"
+            UI.error "You need append '-Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true' into Jenkins startup argument."
+            UI.error "Please check https://github.com/icyleaf/fastlane-plugin-update_jenkins_build/issues/2"
+          else
+            UI.error "Please 'disable CSRF Protection' in 'Global Security Settings' page from Jenkins."
+          end
+        end
 
         [result, res.body]
       end

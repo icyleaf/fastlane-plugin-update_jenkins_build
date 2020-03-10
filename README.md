@@ -10,11 +10,18 @@ This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To 
 fastlane add_plugin update_jenkins_build
 ```
 
+![screenshot](screenshot.png)
+
+### Configure Jenkins
+
+⚠️ **READ ME FRIST**
+
+Jenkins version below 2.221, you need disable CSRF Protection in Global Security Settings page or
+else you must append '-Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true' into Jenkins startup argument, [Check more details](https://github.com/icyleaf/fastlane-plugin-update_jenkins_build/issues/2).
+
 ## About update_jenkins_build
 
 Update build's description of jenkins.
-
-**NOTE**: Make sure disable CSRF Protection in Global Security Settings page.
 
 ```
 $ bundle exec fastlane action update_jenkins_build
