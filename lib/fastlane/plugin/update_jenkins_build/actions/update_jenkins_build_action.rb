@@ -13,7 +13,7 @@ module Fastlane
         @url = params[:url]
         @project = params[:project]
         @build_number = params[:build_number]
-        @description = params[:description]
+        @description = format_description(params[:description])
 
         url = "#{base_uri}/submitDescription"
         res = if @user || @password
@@ -22,7 +22,7 @@ module Fastlane
               else
                 HTTP.post(url, form: {
                   "description" => @description,
-                  "Jenkins-Crumb" => "234234234234234234"
+                  "Jenkins-Crumb" => "234234234234234234" # random value
                 })
               end
 
@@ -55,6 +55,10 @@ module Fastlane
         end
 
         [result, res.body]
+      end
+
+      def self.format_description(descripion)
+        descripion.gsub('\n', "\n")
       end
 
       def self.base_uri
